@@ -18,15 +18,15 @@ resource "aws_cognito_user_pool_client" "api" {
   name         = "${local.name}-api-client"
   user_pool_id = aws_cognito_user_pool.customers.id
 
-  generate_secret                      = false
-  prevent_user_existence_errors        = "ENABLED"
-  enable_token_revocation               = true
-  explicit_auth_flows                   = ["ALLOW_USER_PASSWORD_AUTH", "ALLOW_REFRESH_TOKEN_AUTH"]
-  supported_identity_providers          = ["COGNITO"]
-  access_token_validity                 = 60
-  id_token_validity                     = 60
-  refresh_token_validity                = 1
-  auth_session_validity                 = 3
+  generate_secret               = false
+  prevent_user_existence_errors = "ENABLED"
+  enable_token_revocation       = true
+  explicit_auth_flows           = ["ALLOW_USER_PASSWORD_AUTH", "ALLOW_REFRESH_TOKEN_AUTH"]
+  supported_identity_providers  = ["COGNITO"]
+  access_token_validity         = 60
+  id_token_validity             = 60
+  refresh_token_validity        = 1
+  auth_session_validity         = 3
 
   token_validity_units {
     access_token  = "minutes"

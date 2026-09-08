@@ -59,10 +59,10 @@ resource "aws_cloudwatch_dashboard" "orders" {
   dashboard_body = jsonencode({
     widgets = [
       {
-        type = "metric"
-        x = 0
-        y = 0
-        width = 12
+        type   = "metric"
+        x      = 0
+        y      = 0
+        width  = 12
         height = 6
         properties = {
           title  = "Order flow"
@@ -76,10 +76,10 @@ resource "aws_cloudwatch_dashboard" "orders" {
         }
       },
       {
-        type = "metric"
-        x = 12
-        y = 0
-        width = 12
+        type   = "metric"
+        x      = 12
+        y      = 0
+        width  = 12
         height = 6
         properties = {
           title  = "Queue health"
@@ -93,10 +93,10 @@ resource "aws_cloudwatch_dashboard" "orders" {
         }
       },
       {
-        type = "metric"
-        x = 0
-        y = 6
-        width = 24
+        type   = "metric"
+        x      = 0
+        y      = 6
+        width  = 24
         height = 6
         properties = {
           title  = "Lambda errors and throttles"

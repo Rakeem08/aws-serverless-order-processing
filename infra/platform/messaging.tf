@@ -20,9 +20,57 @@ resource "aws_cloudwatch_event_bus" "orders" {
   name = "${local.name}-events"
 }
 
+data "aws_caller_identity" "alerts_key_owner" {}
+
+resource "aws_kms_key" "alerts" {
+  description             = "Encrypts operational alerts for ${local.name}"
+  enable_key_rotation     = true
+  deletion_window_in_days = 7
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "EnableAccountPermissions"
+        Effect = "Allow"
+        Principal = {
+          AWS = "arn:aws:iam::${data.aws_caller_identity.alerts_key_owner.account_id}:root"
+        }
+        Action   = "kms:*"
+        Resource = "*"
+      },
+      {
+        Sid    = "AllowCloudWatchAlarmEncryption"
+        Effect = "Allow"
+        Principal = {
+          Service = "cloudwatch.amazonaws.com"
+        }
+        Action = [
+          "kms:Decrypt",
+          "kms:GenerateDataKey*"
+        ]
+        Resource = "*"
+        Condition = {
+          StringEquals = {
+            "aws:SourceAccount" = data.aws_caller_identity.alerts_key_owner.account_id
+          }
+          ArnLike = {
+            "aws:SourceArn" = "arn:aws:cloudwatch:${var.aws_region}:${data.aws_caller_identity.alerts_key_owner.account_id}:alarm:${local.name}-*"
+          }
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_kms_alias" "alerts" {
+  name          = "alias/${local.name}-alerts"
+  target_key_id = aws_kms_key.alerts.key_id
+}
+
 resource "aws_sns_topic" "alerts" {
   name              = "${local.name}-alerts"
-  kms_master_key_id = "alias/aws/sns"
+  kms_master_key_id = aws_kms_key.alerts.arn
 }
 
 resource "aws_sns_topic_subscription" "email" {

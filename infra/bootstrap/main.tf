@@ -37,6 +37,7 @@ resource "aws_s3_bucket" "state" {
 
 resource "aws_s3_bucket_versioning" "state" {
   bucket = aws_s3_bucket.state.id
+
   versioning_configuration {
     status = "Enabled"
   }
@@ -44,17 +45,20 @@ resource "aws_s3_bucket_versioning" "state" {
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "state" {
   bucket = aws_s3_bucket.state.id
+
   rule {
     apply_server_side_encryption_by_default {
       kms_master_key_id = aws_kms_key.state.arn
       sse_algorithm     = "aws:kms"
     }
+
     bucket_key_enabled = true
   }
 }
 
 resource "aws_s3_bucket_public_access_block" "state" {
-  bucket                  = aws_s3_bucket.state.id
+  bucket = aws_s3_bucket.state.id
+
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
@@ -108,6 +112,7 @@ resource "aws_iam_role_policy_attachment" "power_user" {
 data "aws_iam_policy_document" "terraform_support" {
   statement {
     sid = "ManageProjectRoles"
+
     actions = [
       "iam:CreateRole",
       "iam:DeleteRole",
@@ -122,6 +127,7 @@ data "aws_iam_policy_document" "terraform_support" {
       "iam:ListAttachedRolePolicies",
       "iam:PassRole"
     ]
+
     resources = [
       for prefix in concat([var.project_name], var.additional_role_prefixes) :
       "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${prefix}-*"
@@ -130,12 +136,14 @@ data "aws_iam_policy_document" "terraform_support" {
 
   statement {
     sid = "UseTerraformState"
+
     actions = [
       "s3:GetObject",
       "s3:PutObject",
       "s3:DeleteObject",
       "s3:ListBucket"
     ]
+
     resources = [
       aws_s3_bucket.state.arn,
       "${aws_s3_bucket.state.arn}/*"
@@ -144,12 +152,14 @@ data "aws_iam_policy_document" "terraform_support" {
 
   statement {
     sid = "UseStateKey"
+
     actions = [
       "kms:Decrypt",
       "kms:Encrypt",
       "kms:GenerateDataKey",
       "kms:DescribeKey"
     ]
+
     resources = [aws_kms_key.state.arn]
   }
 }
