@@ -11,26 +11,49 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v5
+
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
           cache: pip
-      - run: pip install -r requirements-dev.txt
-      - run: ruff check src tests
-      - run: pytest -q
+          cache-dependency-path: requirements-dev.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+
+      - name: Lint Python code
+        run: ruff check src tests
+
+      - name: Run tests
+        run: pytest -q
 
   terraform:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v5
+
       - uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: "1.16.0"
-      - run: terraform -chdir=infra/bootstrap fmt -check -recursive
-      - run: terraform -chdir=infra/platform fmt -check -recursive
-      - run: terraform -chdir=infra/bootstrap init -backend=false
-      - run: terraform -chdir=infra/bootstrap validate
-      - run: terraform -chdir=infra/platform init -backend=false
-      - run: terraform -chdir=infra/platform validate
+
+      - name: Check bootstrap formatting
+        run: terraform -chdir=infra/bootstrap fmt -check -recursive
+
+      - name: Check platform formatting
+        run: terraform -chdir=infra/platform fmt -check -recursive
+
+      - name: Initialize bootstrap for validation
+        run: terraform -chdir=infra/bootstrap init -backend=false
+
+      - name: Validate bootstrap
+        run: terraform -chdir=infra/bootstrap validate
+
+      - name: Initialize platform for validation
+        run: terraform -chdir=infra/platform init -backend=false
+
+      - name: Validate platform
+        run: terraform -chdir=infra/platform validate
