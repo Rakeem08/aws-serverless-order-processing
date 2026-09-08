@@ -1,0 +1,6 @@
+aws_region         = "us-east-1"
+project_name       = "serverless-orders"
+environment        = "dev"
+alert_email        = "your-email@example.com"
+log_retention_days = 14
+allowed_origins    = ["http://localhost:3000"]

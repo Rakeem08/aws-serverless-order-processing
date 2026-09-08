@@ -1,0 +1,51 @@
+name: Deploy serverless platform
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: Plan, apply, or destroy
+        required: true
+        default: plan
+        type: choice
+        options: [plan, apply, destroy]
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: serverless-orders-dev
+  cancel-in-progress: false
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - uses: actions/checkout@v5
+      - uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "1.16.0"
+      - name: Initialize remote state
+        run: |
+          terraform -chdir=infra/platform init \
+            -backend-config="bucket=${{ vars.TF_STATE_BUCKET }}" \
+            -backend-config="key=serverless-orders/platform.tfstate" \
+            -backend-config="region=${{ vars.AWS_REGION }}" \
+            -backend-config="kms_key_id=${{ secrets.TF_STATE_KMS_KEY_ARN }}" \
+            -backend-config="encrypt=true" \
+            -backend-config="use_lockfile=true"
+      - name: Plan
+        if: inputs.action != 'destroy'
+        run: terraform -chdir=infra/platform plan -out=tfplan
+      - name: Apply
+        if: inputs.action == 'apply'
+        run: terraform -chdir=infra/platform apply -auto-approve tfplan
+      - name: Destroy
+        if: inputs.action == 'destroy'
+        run: terraform -chdir=infra/platform destroy -auto-approve

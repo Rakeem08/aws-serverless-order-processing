@@ -1,0 +1,30 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.zip
+backend.hcl
+terraform.tfvars
+.env
+
+cat >> .gitignore <<'EOF'
+
+# Local Python environment and caches
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+
+# Local Terraform settings and state
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+backend.hcl
+tfplan
+EOF
