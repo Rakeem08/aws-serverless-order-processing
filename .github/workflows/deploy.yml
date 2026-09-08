@@ -8,7 +8,10 @@ on:
         required: true
         default: plan
         type: choice
-        options: [plan, apply, destroy]
+        options:
+          - plan
+          - apply
+          - destroy
 
 permissions:
   contents: read
@@ -20,32 +23,66 @@ concurrency:
 
 jobs:
   terraform:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    environment: dev
+
+    env:
+      TF_IN_AUTOMATION: "true"
+      TF_INPUT: "false"
+      TF_VAR_aws_region: ${{ vars.AWS_REGION }}
+      TF_VAR_alert_email: ${{ vars.TF_VAR_alert_email }}
+      STATE_BUCKET: ${{ vars.TF_STATE_BUCKET }}
+      STATE_REGION: ${{ vars.AWS_REGION }}
+      STATE_KMS_KEY: ${{ secrets.TF_STATE_KMS_KEY_ARN }}
+      DEPLOY_ROLE: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+
     steps:
-      - uses: actions/checkout@v5
-      - uses: aws-actions/configure-aws-credentials@v5
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Check required settings
+        shell: bash
+        run: |
+          set -euo pipefail
+          : "${STATE_BUCKET:?Missing TF_STATE_BUCKET}"
+          : "${STATE_REGION:?Missing AWS_REGION}"
+          : "${STATE_KMS_KEY:?Missing TF_STATE_KMS_KEY_ARN}"
+          : "${DEPLOY_ROLE:?Missing AWS_DEPLOY_ROLE_ARN}"
+          : "${TF_VAR_alert_email:?Missing TF_VAR_alert_email}"
+
+      - name: Authenticate to AWS
+        uses: aws-actions/configure-aws-credentials@v5
         with:
           role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
-      - uses: hashicorp/setup-terraform@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: "1.16.0"
+
       - name: Initialize remote state
+        shell: bash
         run: |
           terraform -chdir=infra/platform init \
-            -backend-config="bucket=${{ vars.TF_STATE_BUCKET }}" \
+            -backend-config="bucket=$STATE_BUCKET" \
             -backend-config="key=serverless-orders/platform.tfstate" \
-            -backend-config="region=${{ vars.AWS_REGION }}" \
-            -backend-config="kms_key_id=${{ secrets.TF_STATE_KMS_KEY_ARN }}" \
+            -backend-config="region=$STATE_REGION" \
+            -backend-config="kms_key_id=$STATE_KMS_KEY" \
             -backend-config="encrypt=true" \
             -backend-config="use_lockfile=true"
+
+      - name: Validate Terraform
+        run: terraform -chdir=infra/platform validate
+
       - name: Plan
         if: inputs.action != 'destroy'
         run: terraform -chdir=infra/platform plan -out=tfplan
+
       - name: Apply
         if: inputs.action == 'apply'
-        run: terraform -chdir=infra/platform apply -auto-approve tfplan
+        run: terraform -chdir=infra/platform apply tfplan
+
       - name: Destroy
         if: inputs.action == 'destroy'
         run: terraform -chdir=infra/platform destroy -auto-approve
