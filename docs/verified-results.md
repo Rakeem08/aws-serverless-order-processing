@@ -75,5 +75,8 @@ including owner and repository IDs, restricted to the main branch.
 
 ## Cleanup status
 
-AWS resources remain deployed. Teardown has not yet been verified.
-Preserve Terraform state until cleanup is complete.
+- Destroyed all 46 platform resources.
+- Emptied the versioned Terraform state bucket.
+- Destroyed all 11 bootstrap resources.
+- KMS keys were scheduled for deletion with a seven-day waiting period.
+- Project code and verified results remain saved in GitHub.
