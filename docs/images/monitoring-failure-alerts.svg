@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1220" viewBox="0 0 1800 1220" role="img" aria-labelledby="title desc"><title id="title">Serverless Monitoring and Failure Alerts</title><desc id="desc">API and Lambda logs go to CloudWatch Logs. Order, queue and Lambda metrics populate the dashboard. DLQ count, queue age and processor invocation errors trigger CloudWatch alarms and an encrypted SNS topic sends email to an operator. Partial batch failures require logs and queue monitoring.</desc><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#5b75a0"/></marker><marker id="red" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#dc4558"/></marker></defs>
+<rect x="0" y="0" width="1800" height="1220" rx="0" fill="#f5f8fc" stroke="#f5f8fc"/>
+<text x="60" y="65" font-family="DejaVu Sans, sans-serif" font-size="16" fill="#2563eb" font-weight="700">RAKEEM BREWINGTON  /  CLOUD ENGINEERING PORTFOLIO</text>
+<text x="60" y="123" font-family="DejaVu Sans, sans-serif" font-size="42" fill="#102139" font-weight="700">Monitoring &amp; Failure Alerts</text>
+<text x="60" y="164" font-family="DejaVu Sans, sans-serif" font-size="22" fill="#52647c" font-weight="400">Collect evidence. Detect unhealthy orders. Notify an operator. Investigate before recovery.</text>
+<rect x="55" y="205" width="1690" height="815" rx="24" fill="#edf3fa" stroke="#d3dfed"/>
+<text x="80" y="248" font-family="DejaVu Sans, sans-serif" font-size="16" fill="#3f5675" font-weight="700">01  COLLECT SIGNALS</text>
+<text x="650" y="248" font-family="DejaVu Sans, sans-serif" font-size="16" fill="#3f5675" font-weight="700">02  OBSERVE &amp; DETECT</text>
+<text x="1250" y="248" font-family="DejaVu Sans, sans-serif" font-size="16" fill="#3f5675" font-weight="700">03  NOTIFY &amp; INVESTIGATE</text>
+<path d="M500 362L650 362" stroke="#5b75a0" stroke-width="2.5" fill="none" stroke-dasharray="7 6" marker-end="url(#arrow)"/>
+<text x="527" y="345" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#52647c" font-weight="400">logs</text>
+<path d="M500 552L650 552" stroke="#5b75a0" stroke-width="2.5" fill="none" stroke-dasharray="7 6" marker-end="url(#arrow)"/>
+<text x="521" y="534" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#52647c" font-weight="400">metrics</text>
+<path d="M500 783L650 783" stroke="#5b75a0" stroke-width="2.5" fill="none" stroke-dasharray="7 6" marker-end="url(#arrow)"/>
+<text x="513" y="765" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#52647c" font-weight="400">evaluate</text>
+<path d="M1100 762L1250 762" stroke="#dc4558" stroke-width="2.5" fill="none"  marker-end="url(#red)"/>
+<text x="1116" y="744" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#dc4558" font-weight="400">alarm action</text>
+<path d="M1475 825L1475 867" stroke="#5b75a0" stroke-width="2.5" fill="none"  marker-end="url(#arrow)"/>
+<text x="1490" y="852" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#52647c" font-weight="400">email</text>
+<rect x="80" y="285" width="420" height="155" rx="18" fill="#fff" stroke="#dce5ef"/>
+<circle cx="120" cy="327" r="27" fill="#2563eb" opacity=".10"/><g transform="translate(120,327)" fill="none" stroke="#2563eb" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M-15-20h23l8 8v32h-31Z M8-20v9h8 M-8-3h16 M-8 5h16 M-8 13h10"/></g>
+<text x="160" y="333" font-family="DejaVu Sans, sans-serif" font-size="21" fill="#12223b" font-weight="700">API Gateway + Lambda</text>
+<text x="102" y="373" font-family="DejaVu Sans, sans-serif" font-size="17" fill="#52647c" font-weight="400">API access logs and request status</text>
+<text x="102" y="400" font-family="DejaVu Sans, sans-serif" font-size="17" fill="#52647c" font-weight="400">Application logs and message errors</text>
+<rect x="650" y="285" width="450" height="155" rx="18" fill="#fff" stroke="#dce5ef"/>
+<circle cx="690" cy="327" r="27" fill="#2563eb" opacity=".10"/><g transform="translate(690,327)" fill="none" stroke="#2563eb" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M-15-20h23l8 8v32h-31Z M8-20v9h8 M-8-3h16 M-8 5h16 M-8 13h10"/></g>
+<text x="730" y="333" font-family="DejaVu Sans, sans-serif" font-size="21" fill="#12223b" font-weight="700">CloudWatch Logs</text>
+<text x="672" y="373" font-family="DejaVu Sans, sans-serif" font-size="17" fill="#52647c" font-weight="400">Inspect request and message evidence</text>
+<text x="672" y="400" font-family="DejaVu Sans, sans-serif" font-size="17" fill="#52647c" font-weight="400">Use logs to investigate failed records</text>
+<rect x="80" y="475" width="420" height="155" rx="18" fill="#fff" stroke="#dce5ef"/>
+<circle cx="120" cy="517" r="27" fill="#2563eb" opacity=".10"/><g transform="translate(120,517)" fill="none" stroke="#2563eb" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="-21" y="-16" width="42" height="29" rx="4"/><path d="M-13 4l7-10 7 7 11-10M0 13v8M-10 21h20"/></g>
+<text x="160" y="523" font-family="DejaVu Sans, sans-serif" font-size="21" fill="#12223b" font-weight="700">Application + AWS metrics</text>
+<text x="102" y="563" font-family="DejaVu Sans, sans-serif" font-size="17" fill="#52647c" font-weight="400">OrdersAccepted / OrdersProcessed</text>
+<text x="102" y="590" font-family="DejaVu Sans, sans-serif" font-size="17" fill="#52647c" font-weight="400">SQS backlog and age; Lambda health</text>
+<rect x="650" y="475" width="450" height="155" rx="18" fill="#fff" stroke="#dce5ef"/>
+<circle cx="690" cy="517" r="27" fill="#2563eb" opacity=".10"/><g transform="translate(690,517)" fill="none" stroke="#2563eb" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="-21" y="-16" width="42" height="29" rx="4"/><path d="M-13 4l7-10 7 7 11-10M0 13v8M-10 21h20"/></g>
+<text x="730" y="523" font-family="DejaVu Sans, sans-serif" font-size="21" fill="#12223b" font-weight="700">CloudWatch Dashboard</text>
+<text x="672" y="563" font-family="DejaVu Sans, sans-serif" font-size="17" fill="#52647c" font-weight="400">Order flow and queue health</text>
+<text x="672" y="590" font-family="DejaVu Sans, sans-serif" font-size="17" fill="#52647c" font-weight="400">Lambda errors and throttles</text>
+<rect x="80" y="665" width="420" height="235" rx="18" fill="#fff" stroke="#dce5ef"/>
+<circle cx="120" cy="707" r="27" fill="#dc4558" opacity=".10"/><g transform="translate(120,707)" fill="none" stroke="#dc4558" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="-19" y="-15" width="38" height="30" rx="4"/><path d="M-12-7h24M-12 0h24M-12 7h24"/></g>
+<text x="160" y="713" font-family="DejaVu Sans, sans-serif" font-size="21" fill="#12223b" font-weight="700">Failure signals</text>
+<text x="102" y="753" font-family="DejaVu Sans, sans-serif" font-size="17" fill="#52647c" font-weight="400">SQS: visible DLQ messages</text>
+<text x="102" y="780" font-family="DejaVu Sans, sans-serif" font-size="17" fill="#52647c" font-weight="400">SQS: age of oldest order</text>
+<text x="102" y="807" font-family="DejaVu Sans, sans-serif" font-size="17" fill="#52647c" font-weight="400">Lambda: processor invocation Errors</text>
+<text x="102" y="834" font-family="DejaVu Sans, sans-serif" font-size="17" fill="#52647c" font-weight="400">These metrics drive the three alarms.</text>
+<rect x="650" y="665" width="450" height="235" rx="18" fill="#fff" stroke="#dce5ef"/>
+<circle cx="690" cy="707" r="27" fill="#dc4558" opacity=".10"/><g transform="translate(690,707)" fill="none" stroke="#dc4558" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M-15 10h30l-4-7v-9a11 11 0 0 0-22 0v9ZM-5 16a5 5 0 0 0 10 0"/></g>
+<text x="730" y="713" font-family="DejaVu Sans, sans-serif" font-size="21" fill="#12223b" font-weight="700">CloudWatch Alarms</text>
+<text x="672" y="753" font-family="DejaVu Sans, sans-serif" font-size="17" fill="#52647c" font-weight="400">DLQ messages > 0  •  1 × 60 seconds</text>
+<text x="672" y="780" font-family="DejaVu Sans, sans-serif" font-size="17" fill="#52647c" font-weight="400">Queue age > 120s  •  2 × 60 seconds</text>
+<text x="672" y="807" font-family="DejaVu Sans, sans-serif" font-size="17" fill="#52647c" font-weight="400">Processor Errors > 0  •  1 × 60 seconds</text>
+<text x="672" y="834" font-family="DejaVu Sans, sans-serif" font-size="17" fill="#52647c" font-weight="400">Missing data: not breaching</text>
+<rect x="1250" y="665" width="450" height="160" rx="18" fill="#fff" stroke="#dce5ef"/>
+<circle cx="1290" cy="707" r="27" fill="#7c3aed" opacity=".10"/><g transform="translate(1290,707)" fill="none" stroke="#7c3aed" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M-15 10h30l-4-7v-9a11 11 0 0 0-22 0v9ZM-5 16a5 5 0 0 0 10 0"/></g>
+<text x="1330" y="713" font-family="DejaVu Sans, sans-serif" font-size="21" fill="#12223b" font-weight="700">Amazon SNS</text>
+<text x="1272" y="753" font-family="DejaVu Sans, sans-serif" font-size="17" fill="#52647c" font-weight="400">Operational alert topic</text>
+<text x="1272" y="780" font-family="DejaVu Sans, sans-serif" font-size="17" fill="#52647c" font-weight="400">Encrypted with AWS KMS</text>
+<rect x="1250" y="867" width="450" height="130" rx="18" fill="#fff" stroke="#dce5ef"/>
+<circle cx="1290" cy="909" r="27" fill="#168563" opacity=".10"/><g transform="translate(1290,909)" fill="none" stroke="#168563" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="0" cy="-7" r="7"/><path d="M-13 17v-4a13 13 0 0 1 26 0v4"/></g>
+<text x="1330" y="915" font-family="DejaVu Sans, sans-serif" font-size="21" fill="#12223b" font-weight="700">Operator</text>
+<text x="1272" y="955" font-family="DejaVu Sans, sans-serif" font-size="17" fill="#52647c" font-weight="400">Confirmed email subscription required</text>
+<rect x="1250" y="285" width="450" height="345" rx="18" fill="#ffffff" stroke="#dce5ef"/>
+<text x="1275" y="326" font-family="DejaVu Sans, sans-serif" font-size="16" fill="#2563eb" font-weight="700">INVESTIGATION CHECKLIST</text>
+<text x="1275" y="374" font-family="DejaVu Sans, sans-serif" font-size="18" fill="#233d5d" font-weight="400">1. Read the alarm and affected metric.</text>
+<text x="1275" y="419" font-family="DejaVu Sans, sans-serif" font-size="18" fill="#233d5d" font-weight="400">2. Inspect logs and the dashboard.</text>
+<text x="1275" y="464" font-family="DejaVu Sans, sans-serif" font-size="18" fill="#233d5d" font-weight="400">3. Inspect failed messages in the DLQ.</text>
+<text x="1275" y="509" font-family="DejaVu Sans, sans-serif" font-size="18" fill="#233d5d" font-weight="400">4. Fix the cause before retrying.</text>
+<text x="1275" y="566" font-family="DejaVu Sans, sans-serif" font-size="17" fill="#52647c" font-weight="400">Manual response — no automatic</text>
+<text x="1275" y="592" font-family="DejaVu Sans, sans-serif" font-size="17" fill="#52647c" font-weight="400">remediation is configured.</text>
+<text x="82" y="947" font-family="DejaVu Sans, sans-serif" font-size="16" fill="#52647c" font-weight="400">Dotted arrows: telemetry / metric evaluation</text>
+<text x="82" y="979" font-family="DejaVu Sans, sans-serif" font-size="16" fill="#52647c" font-weight="400">Solid arrows: notifications  •  DLQ and queue-age alarms also notify on recovery to OK.</text>
+<rect x="55" y="1045" width="1690" height="95" rx="18" fill="#fff6eb" stroke="#f0d6b3"/>
+<text x="80" y="1077" font-family="DejaVu Sans, sans-serif" font-size="16" fill="#9a570e" font-weight="700">PARTIAL-BATCH FAILURE IS NOT ALWAYS A LAMBDA INVOCATION ERROR</text>
+<text x="80" y="1110" font-family="DejaVu Sans, sans-serif" font-size="18" fill="#704e2f" font-weight="400">A successful invocation can return failed SQS records. Use application logs, queue age and the DLQ to detect these failures.</text>
+<text x="65" y="1180" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#52647c" font-weight="400">SERVERLESS ORDER PLATFORM  •  Terraform-managed observability  •  Matches the current alarm and dashboard definitions</text>
+</svg>
