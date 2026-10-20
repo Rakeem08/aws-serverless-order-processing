@@ -25,49 +25,9 @@ This portfolio models an authenticated order API with asynchronous processing. T
 
 ### Order submission and status lookup
 
-```mermaid
-flowchart TD
-    Client["Customer / API client"]
-    Cognito["Amazon Cognito"]
-    subgraph API["Authenticated API"]
-        Gateway["API Gateway HTTP API • JWT authorizer"]
-        Create["Create Order Lambda"]
-        Get["Get Order Lambda"]
-    end
-    subgraph Processing["Background processing"]
-        Queue["Amazon SQS • order queue"]
-        Worker["Process Order Lambda"]
-        DLQ["SQS dead-letter queue"]
-    end
-    subgraph Data["Order data and outputs"]
-        DB[("DynamoDB • orders and status")]
-        Receipts[("Amazon S3 • JSON receipts")]
-        Bus["EventBridge • orders event bus"]
-    end
+![AWS serverless order platform architecture: authentication, API routes, queued processing, storage, failure handling and monitoring](docs/images/serverless-order-platform.svg)
 
-    Client -->|"Sign in"| Cognito
-    Cognito -->|"JWT"| Client
-    Client -->|"HTTPS request + JWT"| Gateway
-    Gateway -->|"POST /orders + Idempotency-Key"| Create
-    Gateway -->|"GET /orders/{order_id}"| Get
-    Create -->|"Conditional write: PENDING"| DB
-    Create -->|"Enqueue order ID"| Queue
-    Get -->|"Read order; check customer ownership"| DB
-    Queue -->|"Lambda polls batches"| Worker
-    Queue -->|"Redrive: maxReceiveCount = 3"| DLQ
-    Worker -->|"Read order; update PROCESSED"| DB
-    Worker -->|"Write receipts/order_id.json"| Receipts
-    Worker -->|"Publish OrderProcessed"| Bus
-
-    classDef compute fill:#fff3e0,stroke:#b45309,color:#172033;
-    classDef storage fill:#e8f5e9,stroke:#287a40,color:#172033;
-    classDef messaging fill:#f3e8ff,stroke:#7e22ce,color:#172033;
-    classDef failure fill:#fee2e2,stroke:#b91c1c,color:#172033;
-    class Create,Get,Worker compute;
-    class DB,Receipts storage;
-    class Queue,Bus messaging;
-    class DLQ failure;
-```
+[Open the full-size architecture graphic](docs/images/serverless-order-platform.svg)
 
 1. **Authenticate:** the client obtains a Cognito token. API Gateway validates the JWT before invoking either API Lambda.
 2. **Accept:** Create Order validates the payload and derives an order ID from the customer identity and idempotency key. A new record returns **202**; an existing record returns **200**. Both paths enqueue the order ID.
