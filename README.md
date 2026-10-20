@@ -37,19 +37,9 @@ This portfolio models an authenticated order API with asynchronous processing. T
 
 ### Monitoring and failure alerts
 
-```mermaid
-flowchart TD
-    API["API Gateway + Lambda functions"] -.->|"Access and application logs"| Logs["CloudWatch Logs"]
-    OrderMetrics["OrdersAccepted + OrdersProcessed"] -.-> Dashboard["CloudWatch dashboard"]
-    QueueMetrics["SQS backlog, age and DLQ count"] -.-> Dashboard
-    LambdaMetrics["Lambda errors and throttles"] -.-> Dashboard
-    QueueMetrics -.->|"DLQ count > 0; oldest order > 120s"| Alarms["CloudWatch alarms"]
-    LambdaMetrics -.->|"Processor invocation Errors > 0"| Alarms
-    Alarms --> Topic["SNS alerts • KMS encrypted"]
-    Topic -->|"Confirmed email subscription"| Operator["Operator"]
-    Operator -->|"Investigate"| Logs
-    Operator -->|"Review"| Dashboard
-```
+![Monitoring and failure alerts: telemetry, CloudWatch logs and dashboard, alarm thresholds, encrypted SNS notifications and operator investigation](docs/images/monitoring-failure-alerts.svg)
+
+[Open the full-size monitoring graphic](docs/images/monitoring-failure-alerts.svg)
 
 Dotted arrows represent telemetry; solid arrows represent notifications or operator actions. The queue-age alarm requires two consecutive 60-second evaluation periods. Record-level failures returned in a successful partial-batch response do **not** necessarily increment the Lambda `Errors` metric; logs, queue age, and the DLQ provide additional evidence.
 
