@@ -21,24 +21,42 @@ An online retailer was losing orders during traffic spikes and occasionally fulf
 
 ## Architecture
 
-~~~mermaid
-flowchart TD
-    U[Customer] --> C[Cognito]
-    U --> A[API Gateway]
-    C --> A
-    A --> L1[Order API Lambda]
-    L1 --> D[DynamoDB]
-    L1 --> Q[SQS]
-    Q --> L2[Processor Lambda]
-    Q --> DLQ[Dead-letter queue]
-    L2 --> D
-    L2 --> S3[S3 receipts]
-    L2 --> EB[EventBridge]
-    CW[CloudWatch alarms] --> SNS[SNS alerts]
-    L1 --> CW
-    L2 --> CW
-    Q --> CW
-~~~
+This portfolio models an authenticated order API with asynchronous processing. The diagrams below reflect the Terraform and Python implementation in this repository.
+
+### Order submission and status lookup
+
+![AWS serverless order platform architecture: authentication, API routes, queued processing, storage, failure handling and monitoring](docs/images/serverless-order-platform.svg)
+
+[Open the full-size architecture graphic](docs/images/serverless-order-platform.svg)
+
+1. **Authenticate:** the client obtains a Cognito token. API Gateway validates the JWT before invoking either API Lambda.
+2. **Accept:** Create Order validates the payload and derives an order ID from the customer identity and idempotency key. A new record returns **202**; an existing record returns **200**. Both paths enqueue the order ID.
+3. **Process:** Lambda polls SQS, writes the receipt, conditionally updates the order to `PROCESSED`, and attempts to publish an `OrderProcessed` event.
+4. **Check status:** Get Order reads DynamoDB and checks that the authenticated customer owns the order. Responses return through API Gateway; response arrows are omitted for clarity.
+5. **Recover:** failed records are returned as partial batch failures and retried. Repeatedly failing messages move to the DLQ.
+
+### Monitoring and failure alerts
+
+![Monitoring and failure alerts: telemetry, CloudWatch logs and dashboard, alarm thresholds, encrypted SNS notifications and operator investigation](docs/images/monitoring-failure-alerts.svg)
+
+[Open the full-size monitoring graphic](docs/images/monitoring-failure-alerts.svg)
+
+Dotted arrows represent telemetry; solid arrows represent notifications or operator actions. The queue-age alarm requires two consecutive 60-second evaluation periods. Record-level failures returned in a successful partial-batch response do **not** necessarily increment the Lambda `Errors` metric; logs, queue age, and the DLQ provide additional evidence.
+
+### Design decisions and operating boundaries
+
+| Decision | Purpose | Current implementation |
+| --- | --- | --- |
+| Separate create and get functions | Keep writes and status reads distinct | Separate IAM roles; Get Order has DynamoDB read access |
+| Queue between API and worker | Let API acceptance finish before processing | 90-second visibility timeout; 30-second worker timeout |
+| Bounded processing | Limit downstream pressure | Batch size 10; batching window 5 seconds; maximum consumer concurrency 5 |
+| Duplicate handling | Reuse the order identity across retries | Conditional DynamoDB writes and a deterministic S3 receipt key |
+| Failure isolation | Preserve problematic messages for investigation | Order retention 4 days; DLQ retention 14 days |
+| Infrastructure as code | Make the environment reproducible | Terraform; manual GitHub Actions deployment using OIDC; KMS-encrypted S3 state with locking |
+
+**Scope and limits:** this is an at-least-once processing design, not an exactly-once transaction across DynamoDB, SQS, S3, and EventBridge. The DynamoDB write and SQS send are separate operations; a send failure can leave an order pending until a client retry or reconciliation. Event publication happens after the status update, so a failure can leave a processed order without its event. A transactional outbox and reconciliation would be useful production improvements. The event bus is an extension point; no downstream consumer is shown here.
+
+Implementation references: [API routes](infra/platform/api.tf), [Lambda permissions and polling](infra/platform/lambdas.tf), [queues and alerts](infra/platform/messaging.tf), [monitoring](infra/platform/monitoring.tf), and [application code](src/).
 
 ## Real-world failures this project handles
 

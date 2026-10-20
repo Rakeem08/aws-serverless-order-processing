@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1220" viewBox="0 0 1800 1220" role="img" aria-labelledby="title desc"><title id="title">AWS Serverless Order Platform Architecture</title><desc id="desc">Authenticated API requests use separate create and get Lambda functions. Orders are queued in SQS, processed by Lambda, stored in DynamoDB with S3 receipts and EventBridge events. Failed messages go to a dead-letter queue. CloudWatch and SNS support operations.</desc><defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#5b75a0"/></marker><marker id="red" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#dc4558"/></marker></defs>
+<rect x="0" y="0" width="1800" height="1220" rx="0" fill="#f5f8fc" stroke="#f5f8fc"/>
+<text x="60" y="65" font-family="DejaVu Sans, sans-serif" font-size="16" fill="#2563eb" font-weight="700">RAKEEM BREWINGTON  /  CLOUD ENGINEERING PORTFOLIO</text>
+<text x="60" y="123" font-family="DejaVu Sans, sans-serif" font-size="42" fill="#102139" font-weight="700">AWS Serverless Order Platform</text>
+<text x="60" y="164" font-family="DejaVu Sans, sans-serif" font-size="22" fill="#52647c" font-weight="400">Authenticate customers. Queue orders. Process reliably. Make failures visible.</text>
+<rect x="55" y="205" width="1690" height="665" rx="24" fill="#edf3fa" stroke="#d3dfed"/>
+<text x="80" y="243" font-family="DejaVu Sans, sans-serif" font-size="16" fill="#3f5675" font-weight="700">APPLICATION ARCHITECTURE</text>
+<text x="1170" y="243" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#52647c" font-weight="400">Solid arrows = request, data or event flow</text>
+<path d="M205 355L205 405" fill="none" stroke="#5b75a0" stroke-width="2.5"  marker-end="url(#arrow)"/>
+<text x="222" y="386" font-family="DejaVu Sans, sans-serif" font-size="14" fill="#52647c" font-weight="400">JWT</text>
+<path d="M330 460L400 460" fill="none" stroke="#5b75a0" stroke-width="2.5"  marker-end="url(#arrow)"/>
+<text x="340" y="443" font-family="DejaVu Sans, sans-serif" font-size="13" fill="#52647c" font-weight="400">HTTPS</text>
+<path d="M650 460L720 460" fill="none" stroke="#5b75a0" stroke-width="2.5"  marker-end="url(#arrow)"/>
+<text x="658" y="438" font-family="DejaVu Sans, sans-serif" font-size="14" fill="#52647c" font-weight="400">POST</text>
+<path d="M970 460L1060 460" fill="none" stroke="#5b75a0" stroke-width="2.5"  marker-end="url(#arrow)"/>
+<text x="982" y="438" font-family="DejaVu Sans, sans-serif" font-size="14" fill="#52647c" font-weight="400">enqueue</text>
+<path d="M1310 460L1400 460" fill="none" stroke="#5b75a0" stroke-width="2.5"  marker-end="url(#arrow)"/>
+<text x="1318" y="438" font-family="DejaVu Sans, sans-serif" font-size="14" fill="#52647c" font-weight="400">poll</text>
+<path d="M525 515L525 610" fill="none" stroke="#5b75a0" stroke-width="2.5"  marker-end="url(#arrow)"/>
+<text x="540" y="568" font-family="DejaVu Sans, sans-serif" font-size="14" fill="#52647c" font-weight="400">GET /orders/{id}</text>
+<path d="M650 665L720 665" fill="none" stroke="#5b75a0" stroke-width="2.5"  marker-end="url(#arrow)"/>
+<text x="656" y="646" font-family="DejaVu Sans, sans-serif" font-size="14" fill="#52647c" font-weight="400">read</text>
+<path d="M845 515L845 610" fill="none" stroke="#5b75a0" stroke-width="2.5"  marker-end="url(#arrow)"/>
+<text x="860" y="568" font-family="DejaVu Sans, sans-serif" font-size="14" fill="#52647c" font-weight="400">PENDING</text>
+<path d="M1525 515L1525 555Q1525 575 1505 575L1010 575Q990 575 990 595L990 635L970 635" fill="none" stroke="#5b75a0" stroke-width="2.5"  marker-end="url(#arrow)"/>
+<text x="995" y="598" font-family="DejaVu Sans, sans-serif" font-size="14" fill="#52647c" font-weight="400">Read order / update PROCESSED</text>
+<path d="M1185 515L1185 610" fill="none" stroke="#dc4558" stroke-width="2.5"  marker-end="url(#red)"/>
+<text x="1200" y="545" font-family="DejaVu Sans, sans-serif" font-size="14" fill="#dc4558" font-weight="400">repeated failure</text>
+<path d="M1525 515L1525 610" fill="none" stroke="#5b75a0" stroke-width="2.5"  marker-end="url(#arrow)"/>
+<path d="M1650 460L1695 460L1695 800L1650 800" fill="none" stroke="#5b75a0" stroke-width="2.5"  marker-end="url(#arrow)"/>
+<rect x="80" y="265" width="250" height="110" rx="18" fill="#ffffff" stroke="#dce5ef"/>
+<circle cx="120" cy="305" r="27" fill="#7c3aed" opacity=".10"/><g transform="translate(120,305)" fill="none" stroke="#7c3aed" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M0-19L16-12V0Q15 12 0 20Q-15 12-16 0V-12Z"/><path d="M-7 0l5 5 10-11"/></g>
+<text x="158" y="304" font-family="DejaVu Sans, sans-serif" font-size="18" fill="#12223b" font-weight="700">Amazon Cognito</text>
+<text x="98" y="353" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#52647c" font-weight="400">Sign in and obtain a JWT</text>
+<rect x="80" y="405" width="250" height="110" rx="18" fill="#ffffff" stroke="#dce5ef"/>
+<circle cx="120" cy="445" r="27" fill="#2563eb" opacity=".10"/><g transform="translate(120,445)" fill="none" stroke="#2563eb" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="0" cy="-7" r="7"/><path d="M-13 17v-4a13 13 0 0 1 26 0v4"/></g>
+<text x="158" y="444" font-family="DejaVu Sans, sans-serif" font-size="18" fill="#12223b" font-weight="700">API client</text>
+<text x="98" y="493" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#52647c" font-weight="400">Submit order / check status</text>
+<rect x="400" y="405" width="250" height="110" rx="18" fill="#ffffff" stroke="#dce5ef"/>
+<circle cx="440" cy="445" r="27" fill="#7c3aed" opacity=".10"/><g transform="translate(440,445)" fill="none" stroke="#7c3aed" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M-8-13l-12 13 12 13M8-13l12 13-12 13M3-17l-6 34"/></g>
+<text x="478" y="444" font-family="DejaVu Sans, sans-serif" font-size="18" fill="#12223b" font-weight="700">API Gateway</text>
+<text x="418" y="493" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#52647c" font-weight="400">HTTP API • JWT validation</text>
+<rect x="720" y="405" width="250" height="110" rx="18" fill="#ffffff" stroke="#dce5ef"/>
+<circle cx="760" cy="445" r="27" fill="#d97706" opacity=".10"/><g transform="translate(760,445)" fill="none" stroke="#d97706" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M-13-17h10l17 34h-10L-8-7M-4 1l-9 16"/></g>
+<text x="798" y="444" font-family="DejaVu Sans, sans-serif" font-size="18" fill="#12223b" font-weight="700">Create Order</text>
+<text x="738" y="493" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#52647c" font-weight="400">Lambda • validate + accept</text>
+<rect x="1060" y="405" width="250" height="110" rx="18" fill="#ffffff" stroke="#dce5ef"/>
+<circle cx="1100" cy="445" r="27" fill="#7c3aed" opacity=".10"/><g transform="translate(1100,445)" fill="none" stroke="#7c3aed" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="-19" y="-15" width="38" height="30" rx="4"/><path d="M-12-7h24M-12 0h24M-12 7h24"/></g>
+<text x="1138" y="444" font-family="DejaVu Sans, sans-serif" font-size="18" fill="#12223b" font-weight="700">Amazon SQS</text>
+<text x="1078" y="493" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#52647c" font-weight="400">Buffer orders for processing</text>
+<rect x="1400" y="405" width="250" height="110" rx="18" fill="#ffffff" stroke="#dce5ef"/>
+<circle cx="1440" cy="445" r="27" fill="#d97706" opacity=".10"/><g transform="translate(1440,445)" fill="none" stroke="#d97706" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M-13-17h10l17 34h-10L-8-7M-4 1l-9 16"/></g>
+<text x="1478" y="444" font-family="DejaVu Sans, sans-serif" font-size="18" fill="#12223b" font-weight="700">Process Order</text>
+<text x="1418" y="493" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#52647c" font-weight="400">Lambda • background worker</text>
+<rect x="400" y="610" width="250" height="110" rx="18" fill="#ffffff" stroke="#dce5ef"/>
+<circle cx="440" cy="650" r="27" fill="#d97706" opacity=".10"/><g transform="translate(440,650)" fill="none" stroke="#d97706" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M-13-17h10l17 34h-10L-8-7M-4 1l-9 16"/></g>
+<text x="478" y="649" font-family="DejaVu Sans, sans-serif" font-size="18" fill="#12223b" font-weight="700">Get Order</text>
+<text x="418" y="698" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#52647c" font-weight="400">Lambda • verify ownership</text>
+<rect x="720" y="610" width="250" height="110" rx="18" fill="#ffffff" stroke="#dce5ef"/>
+<circle cx="760" cy="650" r="27" fill="#2563eb" opacity=".10"/><g transform="translate(760,650)" fill="none" stroke="#2563eb" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="0" cy="-12" rx="18" ry="7"/><path d="M-18-12v25c0 10 36 10 36 0v-25M-18 0c0 10 36 10 36 0"/></g>
+<text x="798" y="649" font-family="DejaVu Sans, sans-serif" font-size="18" fill="#12223b" font-weight="700">DynamoDB</text>
+<text x="738" y="698" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#52647c" font-weight="400">Order state + idempotency</text>
+<rect x="1060" y="610" width="250" height="110" rx="18" fill="#ffffff" stroke="#dce5ef"/>
+<circle cx="1100" cy="650" r="27" fill="#dc4558" opacity=".10"/><g transform="translate(1100,650)" fill="none" stroke="#dc4558" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="-19" y="-15" width="38" height="30" rx="4"/><path d="M-12-7h24M-12 0h24M-12 7h24"/></g>
+<text x="1138" y="649" font-family="DejaVu Sans, sans-serif" font-size="18" fill="#12223b" font-weight="700">SQS dead-letter</text>
+<text x="1078" y="698" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#52647c" font-weight="400">Isolate failed messages</text>
+<rect x="1400" y="610" width="250" height="110" rx="18" fill="#ffffff" stroke="#dce5ef"/>
+<circle cx="1440" cy="650" r="27" fill="#168563" opacity=".10"/><g transform="translate(1440,650)" fill="none" stroke="#168563" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="0" cy="-13" rx="18" ry="6"/><path d="M-18-13l5 29q13 8 26 0l5-29M-7 1h14"/></g>
+<text x="1478" y="649" font-family="DejaVu Sans, sans-serif" font-size="18" fill="#12223b" font-weight="700">Amazon S3</text>
+<text x="1418" y="698" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#52647c" font-weight="400">Store JSON order receipts</text>
+<rect x="1400" y="745" width="250" height="110" rx="18" fill="#ffffff" stroke="#dce5ef"/>
+<circle cx="1440" cy="785" r="27" fill="#7c3aed" opacity=".10"/><g transform="translate(1440,785)" fill="none" stroke="#7c3aed" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="0" cy="0" r="6"/><path d="M0-6v-15M6 0h15M0 6v15M-6 0h-15"/><circle cx="0" cy="-22" r="3"/><circle cx="22" cy="0" r="3"/><circle cx="0" cy="22" r="3"/><circle cx="-22" cy="0" r="3"/></g>
+<text x="1478" y="784" font-family="DejaVu Sans, sans-serif" font-size="18" fill="#12223b" font-weight="700">EventBridge</text>
+<text x="1418" y="833" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#52647c" font-weight="400">Publish OrderProcessed</text>
+<text x="82" y="775" font-family="DejaVu Sans, sans-serif" font-size="16" fill="#2563eb" font-weight="700">01  ACCEPT</text>
+<text x="82" y="805" font-family="DejaVu Sans, sans-serif" font-size="17" fill="#52647c" font-weight="400">New order: 202   •   Duplicate: 200</text>
+<text x="82" y="833" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#52647c" font-weight="400">Responses return through API Gateway.</text>
+<text x="500" y="775" font-family="DejaVu Sans, sans-serif" font-size="16" fill="#2563eb" font-weight="700">02  PROCESS</text>
+<text x="500" y="805" font-family="DejaVu Sans, sans-serif" font-size="17" fill="#52647c" font-weight="400">Partial batch retries • at-least-once delivery</text>
+<text x="500" y="833" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#52647c" font-weight="400">Completed orders are skipped by the worker.</text>
+<text x="1000" y="775" font-family="DejaVu Sans, sans-serif" font-size="16" fill="#dc4558" font-weight="700">03  RECOVER</text>
+<text x="1000" y="805" font-family="DejaVu Sans, sans-serif" font-size="17" fill="#52647c" font-weight="400">Redrive threshold: 3 receives</text>
+<text x="1000" y="833" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#52647c" font-weight="400">Inspect DLQ and logs before recovery.</text>
+<rect x="55" y="895" width="1690" height="205" rx="24" fill="#ffffff" stroke="#d3dfed"/>
+<text x="80" y="931" font-family="DejaVu Sans, sans-serif" font-size="16" fill="#3f5675" font-weight="700">OPERATIONS &amp; VISIBILITY</text>
+<rect x="80" y="955" width="300" height="110" rx="18" fill="#ffffff" stroke="#dce5ef"/>
+<circle cx="120" cy="995" r="27" fill="#2563eb" opacity=".10"/><g transform="translate(120,995)" fill="none" stroke="#2563eb" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="-21" y="-16" width="42" height="29" rx="4"/><path d="M-13 4l7-10 7 7 11-10M0 13v8M-10 21h20"/></g>
+<text x="158" y="994" font-family="DejaVu Sans, sans-serif" font-size="18" fill="#12223b" font-weight="700">Telemetry</text>
+<text x="98" y="1043" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#52647c" font-weight="400">API / Lambda / SQS signals</text>
+<rect x="520" y="955" width="300" height="110" rx="18" fill="#ffffff" stroke="#dce5ef"/>
+<circle cx="560" cy="995" r="27" fill="#2563eb" opacity=".10"/><g transform="translate(560,995)" fill="none" stroke="#2563eb" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="-21" y="-16" width="42" height="29" rx="4"/><path d="M-13 4l7-10 7 7 11-10M0 13v8M-10 21h20"/></g>
+<text x="598" y="994" font-family="DejaVu Sans, sans-serif" font-size="18" fill="#12223b" font-weight="700">CloudWatch</text>
+<text x="538" y="1043" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#52647c" font-weight="400">Logs • dashboard • alarms</text>
+<rect x="960" y="955" width="300" height="110" rx="18" fill="#ffffff" stroke="#dce5ef"/>
+<circle cx="1000" cy="995" r="27" fill="#7c3aed" opacity=".10"/><g transform="translate(1000,995)" fill="none" stroke="#7c3aed" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M-15 10h30l-4-7v-9a11 11 0 0 0-22 0v9ZM-5 16a5 5 0 0 0 10 0"/></g>
+<text x="1038" y="994" font-family="DejaVu Sans, sans-serif" font-size="18" fill="#12223b" font-weight="700">Amazon SNS</text>
+<text x="978" y="1043" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#52647c" font-weight="400">KMS-encrypted alert topic</text>
+<rect x="1400" y="955" width="300" height="110" rx="18" fill="#ffffff" stroke="#dce5ef"/>
+<circle cx="1440" cy="995" r="27" fill="#168563" opacity=".10"/><g transform="translate(1440,995)" fill="none" stroke="#168563" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="0" cy="-7" r="7"/><path d="M-13 17v-4a13 13 0 0 1 26 0v4"/></g>
+<text x="1478" y="994" font-family="DejaVu Sans, sans-serif" font-size="18" fill="#12223b" font-weight="700">Operator</text>
+<text x="1418" y="1043" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#52647c" font-weight="400">Confirmed email subscription</text>
+<path d="M380 1010L520 1010" fill="none" stroke="#5b75a0" stroke-width="2.5" stroke-dasharray="7 6" marker-end="url(#arrow)"/>
+<path d="M820 1010L960 1010" fill="none" stroke="#5b75a0" stroke-width="2.5"  marker-end="url(#arrow)"/>
+<path d="M1260 1010L1400 1010" fill="none" stroke="#5b75a0" stroke-width="2.5"  marker-end="url(#arrow)"/>
+<text x="65" y="1141" font-family="DejaVu Sans, sans-serif" font-size="14" fill="#2563eb" font-weight="700">BUILT WITH</text>
+<text x="205" y="1141" font-family="DejaVu Sans, sans-serif" font-size="18" fill="#233d5d" font-weight="600">Terraform   +   GitHub Actions / OIDC   +   S3 remote state / KMS / locking</text>
+<text x="65" y="1180" font-family="DejaVu Sans, sans-serif" font-size="15" fill="#52647c" font-weight="400">Portfolio implementation • Separate service writes are not one atomic transaction • EventBridge consumers are future extensions</text>
+</svg>
