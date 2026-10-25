@@ -1,6 +1,6 @@
 aws_region        = "us-east-1"
 project_name      = "serverless-orders"
-github_repository = "Rakeem08/serverless-order-platform"
+github_repository = "Rakeem08/aws-serverless-order-processing"
 github_branch     = "main"
 additional_role_prefixes = ["ai-incident-assistant"]
 
