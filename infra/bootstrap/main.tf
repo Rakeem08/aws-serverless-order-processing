@@ -95,7 +95,7 @@ data "aws_iam_policy_document" "github_assume" {
       test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:sub"
       values = [
-        "repo:Rakeem08@300660116/serverless-order-platform@1360853051:ref:refs/heads/main"
+        "repo:Rakeem08/aws-serverless-order-processing:ref:refs/heads/main"
       ]
     }
   }
