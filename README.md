@@ -2,6 +2,27 @@
 
 A production-style portfolio project that accepts authenticated orders, processes them asynchronously, survives duplicate requests and worker failures, and alerts an operator when the system is unhealthy.
 
+## Project at a glance
+
+**Business scenario:** An online ordering system must accept customer requests quickly, handle retries safely, recover from background-processing failures, and notify operators about problems.
+
+**What I built:** An authenticated event-driven AWS order platform with API Gateway, Cognito, Python Lambda, DynamoDB, SQS, S3 receipts, CloudWatch monitoring, and SNS alerts. Terraform provisions the platform.
+
+**Verified outcomes**
+- Confirmed duplicate submissions returned the **same order ID**, supporting idempotent requests.
+- Verified asynchronous order processing reached **PROCESSED** status and created an S3 receipt.
+- Ran a controlled failure drill, inspected dead-letter queue behavior, and configured CloudWatch alarms and SNS notifications.
+
+**Key decisions:** SQS decouples intake from processing; idempotency limits duplicate work; a DLQ preserves repeatedly failing messages; monitoring and runbooks make failures easier to investigate.
+
+**Production improvements to prioritize:** Transactional outbox and reconciliation for cross-service consistency, formal SLOs and error budgets, ongoing alarm tests, and tighter IAM permissions.
+
+**Stack:** API Gateway · AWS Lambda · DynamoDB · SQS · S3 · Cognito · CloudWatch · SNS · Terraform · Python
+
+**Explore:** [Architecture](#architecture) · [Failure handling](#real-world-failures-this-project-handles) · [Runbook](docs/runbook.md) · [Source code](https://github.com/Rakeem08/aws-serverless-order-processing)
+
+> **Portfolio scope:** This is a tested engineering project, not a claim of operating a commercial production workload.
+
 ## Business problem
 
 An online retailer was losing orders during traffic spikes and occasionally fulfilling duplicate orders after clients retried timed-out requests. The company needed fast API responses, reliable background processing, clear order status, and operational alarms without maintaining servers.
