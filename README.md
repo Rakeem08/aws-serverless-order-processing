@@ -25,7 +25,7 @@ A production-style portfolio project that accepts authenticated orders, processe
 
 ## Business problem
 
-An online retailer was losing orders during traffic spikes and occasionally fulfilling duplicate orders after clients retried timed-out requests. The company needed fast API responses, reliable background processing, clear order status, and operational alarms without maintaining servers.
+**Simulated portfolio scenario:** An online retailer needs to handle traffic spikes and client retries without losing order visibility or duplicating fulfillment. This project models fast API acceptance, background processing, order-status lookup, and operational alarms without maintaining servers. It does not describe a real client engagement.
 
 ## Solution
 
@@ -123,15 +123,15 @@ docs/                Runbook, interview guide, and deployment checklist
 8. Run the failure drill in docs/runbook.md.
 9. Destroy the platform when finished to stop charges.
 
-Exact commands and evidence requirements are in [the deployment checklist](docs/deployment-checklist.md).
+Exact commands and evidence requirements are in [the deployment checklist](docs/deployment-checklist.md). It also documents the GitHub OIDC identity inputs needed for the current repository. Historical lab results and cleanup are recorded separately in [verified results](docs/verified-results.md).
 
 ## Interview summary
 
 > I built an authenticated, event-driven order platform with API Gateway and Lambda. I used SQS to absorb traffic spikes and retry temporary failures, DynamoDB and an idempotency key to prevent duplicate processing, and a dead-letter queue for messages that could not be recovered automatically. I added CloudWatch dashboards and alarms so the system could be operated, not merely deployed, and provisioned it with Terraform for repeatability.
 
-## Project 5 connection
+## Possible extension: AI Incident Assistant
 
-The companion AI Incident Assistant can subscribe to this project's alarm topic. It gathers bounded CloudWatch evidence and uses Amazon Bedrock to create a human-reviewed incident summary. The projects are separate repositories because order processing and AI operations are different business capabilities.
+An AI Incident Assistant could subscribe to this project's alarm topic, gather bounded CloudWatch evidence, and use Amazon Bedrock to draft an incident summary for human review. This is an integration idea; no companion implementation or subscription is included in this repository.
 
 ## Cost and cleanup
 

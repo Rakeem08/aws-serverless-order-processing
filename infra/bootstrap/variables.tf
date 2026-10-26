@@ -15,6 +15,16 @@ variable "github_repository" {
   type        = string
 }
 
+variable "github_owner_id" {
+  description = "Numeric GitHub owner ID used in the immutable OIDC subject."
+  type        = string
+}
+
+variable "github_repository_id" {
+  description = "Numeric GitHub repository ID used in the immutable OIDC subject."
+  type        = string
+}
+
 variable "github_branch" {
   description = "Branch allowed to assume the deployment role."
   type        = string

@@ -1,6 +1,10 @@
-aws_region        = "us-east-1"
-project_name      = "serverless-orders"
-github_repository = "Rakeem08/aws-serverless-order-processing"
-github_branch     = "main"
+# GitHub IDs below identify this public repository, not an AWS account.
+# For a fork, replace the repository name and both numeric GitHub IDs.
+aws_region               = "us-east-1"
+project_name             = "serverless-orders"
+github_repository        = "Rakeem08/aws-serverless-order-processing"
+github_owner_id          = "300660116"
+github_repository_id     = "1360853051"
+github_branch            = "main"
 additional_role_prefixes = ["ai-incident-assistant"]
 

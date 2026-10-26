@@ -2,6 +2,18 @@
 
 ## 1. Bootstrap remote state
 
+Copy the example below, then edit it before running the plan. Keep `github_repository`, `github_owner_id`, `github_repository_id`, and `github_branch` consistent. The example identifies this public repository; a fork needs its own numeric GitHub IDs.
+
+The role trust matches the branch's immutable OIDC subject:
+
+```text
+repo:Rakeem08@300660116/aws-serverless-order-processing@1360853051:ref:refs/heads/main
+```
+
+See [GitHub's OIDC reference](https://docs.github.com/en/actions/reference/security/oidc#immutable-subject-claims). Custom subject settings must match the actual issued `sub`; the deployment workflow's identity step prints `sub` and `aud` for diagnosis. Do not print or commit the token itself.
+
+Existing local `terraform.tfvars` files need the two numeric ID inputs added before planning. Review and apply the bootstrap trust update before expecting the deployment role to authenticate.
+
 ~~~bash
 cp infra/bootstrap/terraform.tfvars.example infra/bootstrap/terraform.tfvars
 terraform -chdir=infra/bootstrap init
